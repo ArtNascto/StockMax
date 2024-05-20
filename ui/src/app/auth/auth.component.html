@@ -35,6 +35,7 @@
               type="text"
               [(ngModel)]="email"
               placeholder="Email"
+              (keydown.enter)="submit()"
               pInputText
               class="w-full md:w-30rem mb-5"
               style="padding: 1rem"
@@ -45,6 +46,7 @@
               id="password1"
               [(ngModel)]="password"
               placeholder="Senha"
+              (keydown.enter)="submit()"
               [feedback]="false"
               [toggleMask]="true"
               styleClass="mb-5"
@@ -63,3 +65,4 @@
     </div>
   </div>
 </div>
+<p-toast />

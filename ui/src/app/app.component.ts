@@ -70,6 +70,7 @@ export class AppComponent implements OnInit {
       {
         label: 'Produtos',
         icon: 'pi pi-box',
+        routerLink: ['/products']
       }
     ];
   }

@@ -18,10 +18,13 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { ToastModule } from 'primeng/toast';
+
 @Component({
   selector: 'app-auth',
   standalone: true,
   imports: [
+    ToastModule,
     NgxSpinnerModule,
     ButtonModule,
     CheckboxModule,
@@ -46,7 +49,6 @@ export class AuthComponent {
     private messageService: MessageService
   ) {
     this.apiEndpoint = 'http://localhost:8080/api';
-   
   }
   email?: string;
   password?: string;
