@@ -17,7 +17,8 @@ namespace StockMax.Infra.Data.Repositories
         private List<CreateUserDto> users = new()
         {
             new() { Email = "arthurgnascto@gmail.com", Password = "123qwe", Name = "Arthur Nascimento", Uin = "123.123.123-87" },
-            new() { Email = "nandactorres.fcp@gmail.com", Password = "123qwe", Name = "Fernanda Torres", Uin = "123.123.123-87" },
+            new() { Email = "nandactorres.fcp@gmail.com", Password = "123qwe", Name = "Fernanda Pereira", Uin = "123.123.123-87" },
+            new() { Email = "etgc3023.life@gmail.com", Password = "123qwe", Name = "Enzo Torres", Uin = "123.123.123-87" },
         };
 
         private List<Color> colors = new() {

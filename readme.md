@@ -34,3 +34,8 @@
   ```
   dotnet run
   ```
+### Testes
+
+- Acessar a URL: http://localhost:4200
+- Usuario: etgc3023.life@gmail.com
+- Senha: 123qwe
