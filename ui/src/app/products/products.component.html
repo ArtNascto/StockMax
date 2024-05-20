@@ -1,0 +1,294 @@
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="square-loader"
+  [fullScreen]="true"
+></ngx-spinner>
+
+<div class="grid">
+  <p-card
+    header=""
+    class="col-12"
+    [style]="{
+      width: '80vw',
+      'margin-bottom': '2em',
+      'box-sizing': 'border-box;'
+    }"
+  >
+    <div class="mb-3">
+      <p-table
+        [value]="products"
+        [paginator]="true"
+        [rows]="rows"
+        [lazy]="true"
+        [first]="first"
+        responsiveLayout="stack"
+        [breakpoint]="'960px'"
+        [totalRecords]="totalRecords"
+        [showCurrentPageReport]="true"
+        styleClass="p-datatable-gridlines p-datatable-striped"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [columns]="columns"
+        (onLazyLoad)="paginate($event)"
+        currentPageReportTemplate="Apresentando {first} à {last} de {totalRecords} registros"
+      >
+        <ng-template pTemplate="caption">
+          <div style="text-align: right">
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="globalFilter"
+              (keydown.enter)="onSearch()"
+              placeholder="Buscar..."
+            />
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th
+              pSortableColumn="{{ column.field }}"
+              *ngFor="let column of columns"
+            >
+              {{ column.name }}
+
+              <p-sortIcon
+                *ngIf="column.orderBy"
+                field=" {{ column.field }}"
+              ></p-sortIcon>
+            </th>
+
+            <th>Ações</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td *ngFor="let column of columns">
+              <p *ngIf="column.type === 'string'">
+                {{ product[column.field] }}
+              </p>
+              <p *ngIf="column.type === 'date'">
+                {{ product[column.field] | date : "dd/MM/yyyy HH:mm:ss" }}
+              </p>
+            </td>
+            <td>
+              <p-button
+                type="button"
+                icon="pi pi-pencil"
+                (click)="edit(product.id)"
+                styleClass="p-button-text mb-3"
+              />
+              <p-button
+                type="button"
+                icon="pi pi-times"
+                severity="danger"
+                (click)="delete(product.id, $event)"
+                styleClass="p-button-text mb-3"
+              />
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+          <p-button
+            type="button"
+            (click)="add()"
+            icon="pi pi-plus"
+            styleClass="p-button-text"
+          />
+        </ng-template>
+      </p-table>
+    </div>
+  </p-card>
+  <p-dialog
+    [(visible)]="showCreateProduct"
+    [modal]="true"
+    class="col-12"
+    [style]="{
+      width: '80vw',
+      'margin-bottom': '2em',
+      'box-sizing': 'border-box;'
+    }"
+  >
+    <ng-template pTemplate="header"> </ng-template>
+    <div>
+      <p-card class="mb-2">
+        <div
+          class="flex flex-row justify-content-start align-content-start pl-3"
+        >
+          <p-image
+            [src]="productImage"
+            [appendTo]="'body'"
+            alt="Imagem Produto"
+            [preview]="true"
+            width="150"
+          />
+        </div>
+        <div
+          class="flex flex-row justify-content-start align-content-start pt-5 mt-1 pl-3"
+        >
+          <p-fileUpload
+            mode="basic"
+            name="image"
+            chooseIcon="pi pi-upload"
+            [url]="apiEndpoint + '/product/uploadImage/' + newProduct.id"
+            accept="image/*"
+            *ngIf="showImage"
+            (onUpload)="onBasicUploadAuto($event)"
+            maxFileSize="1000000"
+            [auto]="true"
+            chooseLabel="Upload"
+          />
+        </div>
+      </p-card>
+      <p-card>
+        <div
+          class="flex flex-row justify-content-start align-content-start pt-3 mt-2"
+        >
+          <p-floatLabel class="p-3">
+            <input
+              pInputText
+              id="name"
+              [(ngModel)]="newProduct.name"
+              [style]="{ 'max-width': '300px', width: '300px' }"
+            />
+            <label for="name">Nome</label>
+          </p-floatLabel>
+          <p-floatLabel class="p-3">
+            <input
+              pInputText
+              id="code"
+              [(ngModel)]="newProduct.code"
+              [style]="{ 'max-width': '300px', width: '300px' }"
+            />
+            <label for="code">Código</label>
+          </p-floatLabel>
+          <p-floatLabel class="p-3">
+            <input
+              pInputText
+              currencyMask
+              id="value"
+              [(ngModel)]="newProduct.value"
+              [style]="{ 'max-width': '300px', width: '300px' }"
+              [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"
+            />
+            <label for="value">Valor</label>
+          </p-floatLabel>
+        </div>
+        <div
+          class="flex flex-row justify-content-start align-content-start pt-3 mt-1"
+        >
+          <p-floatLabel class="p-3">
+            <p-dropdown
+              [options]="statuses"
+              [style]="{ 'max-width': '300px', width: '300px' }"
+              [(ngModel)]="newProduct.status"
+              optionLabel="label"
+              optionValue="value"
+            />
+            <label for="status">Status</label>
+          </p-floatLabel>
+          <p-floatLabel class="p-3">
+            <input
+              pInputText
+              id="vendor"
+              [(ngModel)]="newProduct.vendor"
+              [style]="{ 'max-width': '300px', width: '300px' }"
+            />
+            <label for="vendor">Fornecedor</label>
+          </p-floatLabel>
+          <p-floatLabel class="p-3">
+            <input
+              pInputText
+              id="label"
+              [(ngModel)]="newProduct.label"
+              [style]="{ 'max-width': '300px', width: '300px' }"
+            />
+            <label for="label">Marca</label>
+          </p-floatLabel>
+        </div>
+        <div
+          class="flex flex-row justify-content-start align-content-start pt-3 mt-1"
+        >
+          <p-floatLabel class="p-3">
+            <p-inputNumber
+              id="quantity"
+              [style]="{ 'max-width': '300px', width: '300px' }"
+              [(ngModel)]="newProduct.quantity"
+              mode="decimal"
+              locale="pt-BR"
+              [min]="0"
+            />
+            <label for="quantity">Quantidade em estoque</label>
+          </p-floatLabel>
+
+          <p-floatLabel class="p-3">
+            <p-multiSelect
+              [appendTo]="'body'"
+              [style]="{ 'max-width': '300px', width: '300px' }"
+              [options]="colors"
+              [(ngModel)]="newProduct.colorsArr"
+              optionLabel="nome"
+              (onChange)="onColorChange($event)"
+              optionLabel="Value"
+              optionValue="Value"
+            >
+              <ng-template pTemplate="footer">
+                <div
+                  class="flex flex-row justify-content-start align-content-start pt-3 mt-1"
+                >
+                  <input
+                    type="text"
+                    pInputText
+                    [(ngModel)]="newColorOption"
+                    (keydown.enter)="addNewColorOption()"
+                    class="p-2"
+                  />
+                  <button
+                    pButton
+                    label="Adicionar"
+                    (click)="addNewColorOption()"
+                  ></button>
+                </div>
+              </ng-template>
+            </p-multiSelect>
+            <label for="float-label">Cores</label>
+          </p-floatLabel>
+          <p-floatLabel class="p-3">
+            <p-dropdown
+              [options]="categoriesLst"
+              [style]="{ 'max-width': '300px', width: '300px' }"
+              [(ngModel)]="newProduct.category"
+              optionLabel="label"
+              optionValue="value"
+              id="category"
+            />
+            <label for="category">Categoria</label>
+          </p-floatLabel>
+        </div>
+        <div
+          class="flex flex-row justify-content-start align-content-start pt-3 mt-1"
+        >
+          <div>
+            <quill-editor
+              [style]="{ height: '320px', width: '70vw' }"
+              [(ngModel)]="newProduct.description"
+              [sanitize]="false"
+            ></quill-editor>
+          </div>
+        </div>
+      </p-card>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button
+        class="p-button-success"
+        severity="success"
+        (click)="save()"
+        label="Salvar"
+      ></p-button>
+      <p-button severity="info" (click)="close()" label="Cancelar"></p-button>
+    </ng-template>
+  </p-dialog>
+</div>
+<p-toast />
+<p-confirmDialog />

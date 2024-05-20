@@ -1,0 +1,13 @@
+<p-menubar [model]="items" *ngIf="islogged()">
+  <ng-template pTemplate="end">
+    <div class="flex align-items-center gap-2">
+      <p-button
+        type="button"
+        (click)="logout()"
+        icon="pi pi-sign-out"
+        styleClass="p-button-text"
+      />
+    </div>
+  </ng-template>
+</p-menubar>
+<router-outlet></router-outlet>

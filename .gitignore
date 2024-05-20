@@ -1,0 +1,8 @@
+data
+repository
+db
+bin
+obj
+node_modules
+.angular
+.vs

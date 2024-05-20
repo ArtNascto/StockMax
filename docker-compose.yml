@@ -1,0 +1,22 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "19J<SPQB4Ic"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./db:/var/opt/mssql/data
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000" 
+      - "37169:37169" 
+    environment:
+      MINIO_ROOT_USER: minioadmin 
+      MINIO_ROOT_PASSWORD: minioadmin 
+    volumes:
+      - ./repository:/data 
+    command: server /data
