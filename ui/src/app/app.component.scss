@@ -1,0 +1,17 @@
+.text-primary {
+  div {
+    a {
+      span {
+        color: var(--primary-color) !important;
+      }
+    }
+  }
+}
+::ng-deep {
+  .p-menuitem-link-active {
+    .p-menuitem-icon,
+    .p-menuitem-text {
+      color: var(--primary-color) !important;
+    }
+  }
+}

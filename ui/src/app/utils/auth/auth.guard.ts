@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
   isTokenExpired(token: string): boolean {
     if (token == '') return true;
     const decodedToken: any = jwtDecode(token);
-    const currentTime = Date.now() / (60 * 720); // Em segundos
+    const currentTime = Date.now() / 7200; // Em segundos
     return decodedToken.exp < currentTime;
   }
 }

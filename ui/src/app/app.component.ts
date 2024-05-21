@@ -65,13 +65,16 @@ export class AppComponent implements OnInit {
     localStorage.removeItem('lastAccess');
     this.router.navigate(['/auth']);
   }
+
   ngOnInit() {
     this.items = [
       {
         label: 'Produtos',
         icon: 'pi pi-box',
-        routerLink: ['/products']
-      }
+        routerLink: ['/products'],
+        routerLinkActiveOptions: { exact: true, route: '/products' },
+        styleClass: 'menucus',
+      },
     ];
   }
 }
